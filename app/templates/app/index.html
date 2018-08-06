@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'app/css/bootstrap.min.css' %}">
+  <script src="{% static 'app/js/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'app/js/userScripts.js' %}"></script>
+  
+  
+ 
+</head>
+<body>
+	<h1> Markup </h1>
+  Enter the words:<br>
+  <textarea rows="4" id="words" cols="50" name = "worrds" oninput="myFunction()"> </textarea>
+   
+	<p id="target"> </p>
+
+</body>
+</html>
