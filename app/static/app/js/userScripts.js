@@ -1,4 +1,4 @@
-function myFunction(data) {
+/*function myFunction(data) {
 	if(!data){
 		document.getElementById("target").innerHTML = "";
 	}
@@ -7,28 +7,27 @@ function myFunction(data) {
 	}
 }
 
-$(document).ready(function(){
-    $("#button1").click(function(){
-		var para = $("#words").val();
-		alert(para);
-       
-    });
+*/
 	
-	$("#words").on("input",function(){
-		var para = $("#words").val();
+$("#words").on("input",function(){
+	var para = $("#words").val();
 		
-			$.ajax({
-				url: '/markup/',
-				method: 'POST',
-				data: {
+		$.ajax({
+			url: '/markup/',
+			method: 'POST',
+			data: {
 				  'words': para
 				},
 				
-				success: function (data) {
-				  myFunction(data);  
+			success: function (data) {
+				  //myFunction(data);
+				if(!data){
+				document.getElementById("target").innerHTML = "";
 				}
-			  });
-		
-		
+				else{	
+				document.getElementById("target").innerHTML = data;
+				}
+				}
+		});		
 	});
 });
