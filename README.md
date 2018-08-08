@@ -1,5 +1,5 @@
 # Markup Text Editor 
-This package can be used to format the text in a way with the specified markups. The notations followed in the markup are below:\ 
+This is a markup text editor which converts the below notations into the corresponding text format.
 
  \*\*within double asterisk** **-- Bold** 
 
