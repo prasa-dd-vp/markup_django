@@ -8,8 +8,8 @@ def home(request):
     return render(request, 'app/index.html')
 
 def bold(data):
-    print("inside bold: "+data)
-    return re.sub(r'\*\*([\*\w\n\s.]*)\*\*',r'<b>\1</b>',data) #_/a-zA-Z0-9\\__,.\s
+    #print("inside bold: "+data)
+    return re.sub(r'\*\*([\*\w\n\s.<>]*)\*\*',r'<b>\1</b>',data) #([\*\w\n\s.<>]*)
 
 def italics(data):
     #print("inside italics"+data)
@@ -24,25 +24,16 @@ def strike(data):
     return re.sub(r'\$\$([<a-z>]*)(.*[\w\n]*)([/<a-z>]*)\$\$',r'<strike>\1\2\3</strike>',data)
 
 def newline(data):
-    return re.sub(r'([\n])',r'<br>\1',data) 
-
+    return re.sub(r'([^>{1}])\n',r'\1<br>\n',data)
 
 def bullets(data):
-    #print("inside bullets "+data)
-    b = re.sub(r'^[^a-zA-Z0-9]*\*{1}\s{1}(.*)\n',r'<ul><li>\1</li></ul>\n',data, flags = re.M)
-    b = b.replace("</ul>\n<ul>","")
-    b = b.replace("</ul><br>","</ul>")
-    print("inside bullets: "+b)
+    b = re.sub(r'^[^a-zA-Z0-9]*((\*\s.*[\w<>]+\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
+    b = re.sub(r'^\*\s((.*[\w<>]+\n))',r'<li>\1</li>',b, flags = re.M)
     return b
 
-
-
 def numbers(data):
-    #print("inside fun"+ data)
-    n = re.sub(r'^[^a-zA-Z0-9]*[0-9]+.{1}\s{1}(.*)\n',r'<ol><li>\1</li></ol>',data, flags = re.M)
-    #print(n)
-    n = n.replace("</ol><ol>","")
-    n = n.replace("</ol><br>","</ol>")
+    n = re.sub(r'^[^a-zA-Z0-9]*(([0-9]+.{1}\s{1}.*[\w<>]+\n)+)',r'<ol>\n\1</ol>\n',data, flags = re.M)   
+    n = re.sub(r'^[0-9]+.\s{1}((.*[\w<>]+\n))',r'<li>\1</li>',n, flags = re.M)
     return n
 
 def link(data):
@@ -57,13 +48,10 @@ def h2_header(data):
 def h3_header(data):
     return re.sub(r'(#{3})\s(.*)\n',r'<h3>\2</h3>',data)
 
-
-
 def space(data):
     return data.replace(" ", "&nbsp;")
 
-#re.sub(r'(\s{1}\*{1}\s{1}.*\n)+',r'<ol>\g<0></ol>',data)
-#((\s\*\s)+\s*\w*\n)+
+
 def process(request):
     if request.method == "POST":
         words = request.POST.get('words')
