@@ -9,7 +9,9 @@ This is a markup text editor which converts the below notations into the corresp
 
  $$within two dollars$$ **-- Strike through**
 
- \* item 1 \ \* item 2 **-- Unordered list with two items**
+ \* item 1
+
+ \* item 2 **-- Unordered list with two items**
 
  1. item 1
  2. item 2 **-- Ordered list with two items**
