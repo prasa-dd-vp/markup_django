@@ -27,20 +27,25 @@ def newline(data):
     return re.sub(r'([^>{1}])\n',r'\1<br>\n',data)
 
 def bullets(data):
-    b = re.sub(r'^[^a-zA-Z0-9]*((\*{1}\s{1}.*[\w<>]+\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
-    b = re.sub(r'^\*{1}\s{1}((.*[\w<>]+\n))',r'<li>\1</li>',b, flags = re.M)
+    print("inside bullets: "+data)
+    b = re.sub(r'(^(\*{1}\s{1}(.)*\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
+    print("after 1: "+b)
+    #b = re.sub(r'(^(\*{4}\s{1}(.)*\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
+    #print("after 2: "+b)
+    b = re.sub(r'^\*{1}\s{1}((.|)*)',r'<li>\1</li>',b, flags = re.M)
+    print("after 3: "+b)
     return b
 
 def numbers(data):
-    n = re.sub(r'^[^a-zA-Z0-9]*(([0-9]+.{1}\s{1}.*[\w<>]+\n)+)',r'<ol>\n\1</ol>\n',data, flags = re.M)   
-    n = re.sub(r'^[0-9]+.\s{1}((.*[\w<>]+\n))',r'<li>\1</li>',n, flags = re.M)
+    n = re.sub(r'(^([0-9]+.{1}\s{1}(.)*\n)+)',r'<ol>\n\1</ol>\n',data, flags = re.M)   
+    n = re.sub(r'^[0-9]+.{1}\s{1}((.)*\n)',r'<li>\1</li>',n, flags = re.M)
     return n
 
 def link(data):
     return re.sub(r'\[(\w+)\]\(([\w:/.]+)\)',r'<a href= "\2">\1</a>',data)
 
 def h1_header(data):
-    return re.sub(r'[^#](#{1})\s(.*)\n',r'<h1>\2</h1>',data)
+    return re.sub(r'^#{1}\s(.*)\n',r'<h1>\1</h1>',data, flags = re.M)
 
 def h2_header(data):
     return re.sub(r'(#{2})\s(.*)\n',r'<h2>\2</h2>',data)
@@ -67,10 +72,10 @@ def process(request):
         result = newline(result)
         result = bullets(result)
         result = numbers(result)   
-        #result = h1_header(result)
+        result = h1_header(result)
         #result = h2_header(result)
         #result = h3_header(result)
         result = space(result)
         result = link(result)
-        print(result)
+        #print(result)
         return HttpResponse(result)
