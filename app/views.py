@@ -9,26 +9,26 @@ def home(request):
 
 def bold(data):
     #print("inside bold: "+data)
-    return re.sub(r'\*\*([\*\w\n\s.<>]*)\*\*',r'<b>\1</b>',data) #([\*\w\n\s.<>]*)
+    return re.sub(r'\*\*((.|\n)*)\*\*',r'<b>\1</b>',data) #([\*\w\n\s.<>]*)
 
 def italics(data):
     #print("inside italics"+data)
-    return re.sub(r'//([<a-z>]*)([^http:][<>/\w\n]*)([/<a-z>]*)//',r'<i>\1\2\3</i>',data)
+    return re.sub(r'//([<a-z>]*)([^http:](.|\n)*)([/<a-z>]*)//',r'<i>\1\2\3</i>',data)
 
 def underline(data):
     #print("inside underline"+data)
-    return re.sub(r'__([<a-z>]*)(.*[\w\n]*)([/<a-z>]*)__',r'<u>\1\2\3</u>',data)
+    return re.sub(r'__([<a-z>]*)((.|\n)*)([/<a-z>]*)__',r'<u>\1\2\3</u>',data)
 
 def strike(data):
     #print("inside underline"+data)
-    return re.sub(r'\$\$([<a-z>]*)(.*[\w\n]*)([/<a-z>]*)\$\$',r'<strike>\1\2\3</strike>',data)
+    return re.sub(r'\$\$([<a-z>]*)((.|\n)*)\$\$',r'<strike>\1\2\3</strike>',data)
 
 def newline(data):
     return re.sub(r'([^>{1}])\n',r'\1<br>\n',data)
 
 def bullets(data):
-    b = re.sub(r'^[^a-zA-Z0-9]*((\*\s.*[\w<>]+\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
-    b = re.sub(r'^\*\s((.*[\w<>]+\n))',r'<li>\1</li>',b, flags = re.M)
+    b = re.sub(r'^[^a-zA-Z0-9]*((\*{1}\s{1}.*[\w<>]+\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
+    b = re.sub(r'^\*{1}\s{1}((.*[\w<>]+\n))',r'<li>\1</li>',b, flags = re.M)
     return b
 
 def numbers(data):
