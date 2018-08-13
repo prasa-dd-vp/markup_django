@@ -24,23 +24,28 @@ def strike(data):
     return re.sub(r'\$\$([<a-z>]*)((.|\n)*)\$\$',r'<strike>\1\2\3</strike>',data)
 
 def newline(data):
-    return re.sub(r'([^>{1}])\n',r'\1<br>\n',data)
+    return re.sub(r'(.*)\n',r'\1<br>\n',data)
 
 def bullets(data):
-    print("inside bullets: "+data)
-    b = re.sub(r'(^(\*{1}\s{1}(.)*\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
-    print("after 1: "+b)
-    #b = re.sub(r'(^(\*{4}\s{1}(.)*\n)+)',r'<ul>\n\1</ul>\n',data, flags = re.M)
-    #print("after 2: "+b)
-    b = re.sub(r'^\*{1}\s{1}((.|)*)',r'<li>\1</li>',b, flags = re.M)
-    print("after 3: "+b)
+    data = re.sub(r'(^(\ {0}\*{1}\s{1}(.)*\n)+(\ {0,}\*\ {1}(.)*\n)*)',r'<ul>\n\1</ul>\n',data, flags = re.M)
+    for i in range(1,5):
+        data = re.sub(r'(^(\ {'+str(i)+'}\*{1}\s{1}(.)*\n)+(\ {'+str(i)+',}\*\ {1}(.)*\n)*)',r'<ul>\n\1</ul></li>\n',data, flags = re.M)   
+    print("outer ul:\n"+data)
+    b = re.sub(r'^[\s]*\*{1}\s{1}((.|)*)(<[a-z>]*>)(\n<[a-z]*>)',r'<li>\1\n<ul>',data, flags = re.M)
+    b = re.sub(r'^[\s]*\*{1}\s{1}((.|)*)(<[a-z>]*>)',r'<li>\1</li>',b, flags = re.M)
     return b
 
-def numbers(data):
-    n = re.sub(r'(^([0-9]+.{1}\s{1}(.)*\n)+)',r'<ol>\n\1</ol>\n',data, flags = re.M)   
-    n = re.sub(r'^[0-9]+.{1}\s{1}((.)*\n)',r'<li>\1</li>',n, flags = re.M)
-    return n
 
+def numbers(data):
+    data = re.sub(r'(^(\ {0}[0-9]+.{1}\ {1}(.)*\n)+(\ {0,}[0-9]+.{1}\ {1}(.)*\n)*)',r'<ol>\n\1</ol>\n',data, flags = re.M)
+    for j in range(1,5):
+        data = re.sub(r'(^(\ {'+str(j)+'}[0-9]+.{1}\s{1}(.)*\n)+(\ {'+str(j)+',}[0-9]+.{1}\ {1}(.)*\n)*)',r'<ol>\n\1</ol></li>\n',data, flags = re.M)
+    print("after loop:\n"+ data)
+    n = re.sub(r'^[\s]*[0-9]+.{1}\s{1}((.|)*)(<[a-z>]*>)(\n<[a-z]*>)',r'<li>\1\n<ol>',data, flags = re.M)
+    n = re.sub(r'^[\s]*[0-9]+.{1}\s{1}((.|)*)(<[a-z>]*>)',r'<li>\1</li>',n, flags = re.M)
+    return n
+    
+    
 def link(data):
     return re.sub(r'\[(\w+)\]\(([\w:/.]+)\)',r'<a href= "\2">\1</a>',data)
 
